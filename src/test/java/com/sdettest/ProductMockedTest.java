@@ -5,6 +5,7 @@ import com.sdettest.exceptions.ProductPriceCalculationException;
 import com.sdettest.repository.ProductRepository;
 import com.sdettest.service.IProductPriceService;
 import com.sdettest.service.ProductPriceService;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.ArrayList;
