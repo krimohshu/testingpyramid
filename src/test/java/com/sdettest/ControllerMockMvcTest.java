@@ -1,41 +1,51 @@
 package com.sdettest;
 
-import com.sdettest.controller.ProductController;
-import com.sdettest.service.ProductService;
+import com.sdettest.model.Product;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.MediaType;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.web.client.RestTemplate;
+import static org.assertj.core.api.Assertions.*;
 
-import java.util.Arrays;
 
-import static org.hamcrest.Matchers.hasSize;
-import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-/*@RunWith(SpringRunner.class)
-@WebMvcTest(controllers = ProductController.class, secure=false)
+@RunWith(SpringRunner.class)
+//@SpringBootTest
+//@WebMvcTest(controllers = ProductController.class, secure=false)
+/*@WebMvcTest(controllers = ProductController.class, secure=false)
 @AutoConfigureMockMvc*/
+//@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+//@AutoConfigureMockMvc
+//@WebAppConfiguration
+//@ImportResource({ "file:application.property" })
+//@PropertySource("classpath:application.properties")
+//@TestPropertySource(locations = "classpath:application.properties")
+//@ActiveProfiles("dev")
 public class ControllerMockMvcTest {
 
-   /* @MockBean
-    private ProductService productService;
-    @Autowired
-    private MockMvc mockMvc;
+    RestTemplate restTemplate = new RestTemplate();
+
+    @LocalServerPort
+    int randomServerPort;
 
    @Test
-    public void testControllerMVCTests(){
+   public void contextLoads() throws Exception {
+   }
 
-       //TO_DO
-   }*/
+   //RestTamplate POST test
+    @Test
+    public void createProduct() throws Exception {
+        ResponseEntity<Product> response  =  restTemplate.postForEntity("http://localhost:" +randomServerPort + "createproduct" ,new Product(12.0 , "candy") , Product.class);
 
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(response.getBody().getName()).isEqualTo("candy");
+        assertThat(response.getBody()).isInstanceOf(Product.class);
+
+   }
 
 }
